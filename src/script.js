@@ -23,6 +23,18 @@ import { fibonacciMod, fibonacciShiftRight } from './fibonacci';
     initialize(option = {}) {
     }
 
+    get constantArray() {
+      return constantArray;
+    }
+
+    get zeros() {
+      return zeros;
+    }
+
+    get ones() {
+      return ones;
+    }
+
     get range() {
       return range;
     }
