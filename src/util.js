@@ -32,5 +32,4 @@ export const range = (a, b) => {
   } else {
     return Array(b - a).fill(0).map((_, i) => a + i);
   }
-}
-
+};

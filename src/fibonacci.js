@@ -7,8 +7,8 @@ export const fibonacciMod = (n) => {
   const ret = floor((n + 2) * r) - floor((n + 1) * r);
 
   return ret;
-}
+};
 
 export const fibonacciShiftRight = (n) => {
   return Math.round(n / φ);
-}
+};

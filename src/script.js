@@ -79,7 +79,7 @@ import { fibonacciMod, fibonacciShiftRight } from './fibonacci';
     fromDigits(arr, method = 10) {
       const baseMap = (f = pow) => {
         return (x, i) => x * f(i);
-      }
+      };
 
       if (method == null) {
         return m => this.fromDigits(arr, m);
