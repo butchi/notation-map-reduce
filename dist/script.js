@@ -159,6 +159,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
       }
     }, {
+      key: 'constantArray',
+      get: function get() {
+        return _util.constantArray;
+      }
+    }, {
+      key: 'zeros',
+      get: function get() {
+        return _util.zeros;
+      }
+    }, {
+      key: 'ones',
+      get: function get() {
+        return _util.ones;
+      }
+    }, {
       key: 'range',
       get: function get() {
         return _util.range;

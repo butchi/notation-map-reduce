@@ -1,7 +1,5 @@
 const notation = new Notation();
 
-console.log(notation.integerDigits(0, -2));
-
 console.log(notation.fromDigits([0, 1, 0, 1]));
 console.log(notation.fromDigits([0, 1, 0, 1], 10));
 console.log(notation.fromDigits([0, 1, 0, 1], 2));
