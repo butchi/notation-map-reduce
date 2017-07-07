@@ -9,6 +9,6 @@ export const fibonacciMod = (n) => {
   return ret;
 };
 
-export const fibonacciShiftRight = (n) => {
-  return Math.round(n / φ);
-};
+export const fibonacciShiftRight = n => Math.round(n / φ);
+
+export const fibonacciShiftLeft = n => Math.round(n * φ);

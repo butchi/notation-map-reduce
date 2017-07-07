@@ -1,19 +1,9 @@
 import { φ, fibonacci, mod, sum, total, pow, pow2, constantArray, zeros, ones, range } from './util';
-import { positionalMod, positionalShiftRight } from './positional';
-import { fibonacciMod, fibonacciShiftRight } from './fibonacci';
+import { positionalShiftLeft, positionalShiftRight, positionalMod } from './positional';
+import { fibonacciShiftLeft, fibonacciShiftRight, fibonacciMod } from './fibonacci';
 
 (function() {
   'use strict';
-
-  // export const shiftRight = (method = 10) => {
-  //   if (typeof method === 'number') {
-  //     const base = method;
-  //     return positionalShiftRight(base);
-  //   } else {
-  //     const func = method;
-  //     return func;
-  //   }
-  // };
 
   class Notation {
     constructor(option) {
@@ -39,25 +29,12 @@ import { fibonacciMod, fibonacciShiftRight } from './fibonacci';
       return range;
     }
 
-    integerDigitsPositional(number, base, maxLen = 20) {
+    integerDigitsWithFunc(number, pick, pull, maxLen = 20) {
       const arr = zeros(maxLen);
 
       arr.reduce((p, _c, i) => {
-        let m = positionalMod(base)(p);
-        let remain = positionalShiftRight(base)(p - m);
-        arr[i] = m;
-        return remain;
-      }, number);
-
-      return arr;
-    }
-
-    integerDigitsWithFunc(number, mod, shiftRight, maxLen = 20) {
-      const arr = zeros(maxLen);
-
-      arr.reduce((p, _c, i) => {
-        let m = mod(p);
-        let remain = shiftRight(p - m);
+        let m = pick(p);
+        let remain = pull(p - m);
         arr[i] = m;
         return remain;
       }, number);
@@ -70,24 +47,37 @@ import { fibonacciMod, fibonacciShiftRight } from './fibonacci';
         return (m) => this.integerDigits(number, m);
       } else if (typeof method === 'number') {
         const base = method;
-        return this.integerDigitsPositional(number, base, maxLen)
+        return this.integerDigitsWithFunc(number, positionalMod(base), positionalShiftRight(base), maxLen)
       } else if (method === 'fibonacci') {
         return this.integerDigitsWithFunc(number, fibonacciMod, fibonacciShiftRight, maxLen);
       }
     }
 
-    fromDigits(arr, method = 10) {
-      const baseMap = (f = pow) => {
-        return (x, i) => x * f(i);
-      };
+    fromDigitsWithFunc(arr, push) {
+      let weight = 1;
 
+      const ret = arr.reduce((p, c, _i) => {
+        const val = p + c * weight;
+        weight = push(weight);
+        return val;
+      }, 0);
+
+      return ret;
+    }
+
+    fromDigits(arr, method = 10) {
       if (method == null) {
         return m => this.fromDigits(arr, m);
       } else if (typeof method === 'number') {
-        const n = method;
-        return this.fromDigits(arr, pow(n));
+        const base = method;
+        return this.fromDigits(arr, positionalShiftLeft(base));
+      } else if (method === 'fibonacci') {
+        return this.fromDigitsWithFunc(arr, fibonacciShiftLeft);
       } else if (typeof method === 'function') {
-        return arr.map(baseMap(method)).reduce(sum);
+        const push = method;
+
+        return this.fromDigitsWithFunc(arr, push);
+        // return arr.map(baseMap(method)).reduce(sum);
       }
     }
   }
