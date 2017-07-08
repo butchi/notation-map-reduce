@@ -94,17 +94,3 @@ generateTable({
   mode: 'fibonacci',
   len: 9,
 });
-
-// notation.range(20).map(i => {
-//   const v = notation.fromDigits(notation.integerDigits(i, -2), -2);
-//   console.log(v);
-// });
-
-// console.log('Fibonacci Notation:');
-
-// notation.range(20).map(i => {
-//   const v = notation.fromDigits(notation.integerDigits(i, 'fibonacci', 10), 'fibonacci');
-//   console.log(v);
-// });
-
-// console.log('--');
