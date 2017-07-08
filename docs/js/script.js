@@ -76,7 +76,7 @@ generateTable({
   className: 'tbl-binary',
   max: 64,
   mode: 2,
-  len: 10,
+  len: 9,
 });
 
 generateTable({
@@ -84,7 +84,7 @@ generateTable({
   className: 'tbl-negabinary',
   max: 64,
   mode: -2,
-  len: 10,
+  len: 9,
 });
 
 generateTable({
@@ -92,7 +92,7 @@ generateTable({
   className: 'tbl-fibonacci',
   max: 64,
   mode: 'fibonacci',
-  len: 10,
+  len: 9,
 });
 
 // notation.range(20).map(i => {
