@@ -10,6 +10,11 @@ body {
   margin-top: 100px;
 }
 
+.elm-tr:first-of-type .elm-td {
+  font-weight: bold;
+  color: red;
+}
+
 .elm-td {
   width: 40px;
 
