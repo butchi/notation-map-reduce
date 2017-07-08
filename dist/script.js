@@ -4,7 +4,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.fibonacciShiftRight = exports.fibonacciMod = undefined;
+exports.fibonacciShiftLeft = exports.fibonacciShiftRight = exports.fibonacciMod = undefined;
 
 var _util = require('./util');
 
@@ -22,6 +22,10 @@ var fibonacciShiftRight = exports.fibonacciShiftRight = function fibonacciShiftR
   return Math.round(n / _util.φ);
 };
 
+var fibonacciShiftLeft = exports.fibonacciShiftLeft = function fibonacciShiftLeft(n) {
+  return Math.round(n * _util.φ);
+};
+
 },{"./util":4}],2:[function(require,module,exports){
 "use strict";
 
@@ -36,9 +40,15 @@ var positionalMod = exports.positionalMod = function positionalMod(m) {
 
 var positionalShiftRight = exports.positionalShiftRight = function positionalShiftRight() {
   var m = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 10;
-
   return function (n) {
     return n / m;
+  };
+};
+
+var positionalShiftLeft = exports.positionalShiftLeft = function positionalShiftLeft() {
+  var m = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 10;
+  return function (n) {
+    return n * m;
   };
 };
 
@@ -59,16 +69,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 (function () {
   'use strict';
 
-  // export const shiftRight = (method = 10) => {
-  //   if (typeof method === 'number') {
-  //     const base = method;
-  //     return positionalShiftRight(base);
-  //   } else {
-  //     const func = method;
-  //     return func;
-  //   }
-  // };
-
   var Notation = function () {
     function Notation(option) {
       _classCallCheck(this, Notation);
@@ -82,31 +82,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         var option = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       }
     }, {
-      key: 'integerDigitsPositional',
-      value: function integerDigitsPositional(number, base) {
-        var maxLen = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 20;
-
-        var arr = (0, _util.zeros)(maxLen);
-
-        arr.reduce(function (p, _c, i) {
-          var m = (0, _positional.positionalMod)(base)(p);
-          var remain = (0, _positional.positionalShiftRight)(base)(p - m);
-          arr[i] = m;
-          return remain;
-        }, number);
-
-        return arr;
-      }
-    }, {
       key: 'integerDigitsWithFunc',
-      value: function integerDigitsWithFunc(number, mod, shiftRight) {
+      value: function integerDigitsWithFunc(number, pick, pull) {
         var maxLen = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 20;
 
         var arr = (0, _util.zeros)(maxLen);
 
         arr.reduce(function (p, _c, i) {
-          var m = mod(p);
-          var remain = shiftRight(p - m);
+          var m = pick(p);
+          var remain = pull(p - m);
           arr[i] = m;
           return remain;
         }, number);
@@ -127,10 +111,23 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           };
         } else if (typeof method === 'number') {
           var base = method;
-          return this.integerDigitsPositional(number, base, maxLen);
+          return this.integerDigitsWithFunc(number, (0, _positional.positionalMod)(base), (0, _positional.positionalShiftRight)(base), maxLen);
         } else if (method === 'fibonacci') {
           return this.integerDigitsWithFunc(number, _fibonacci.fibonacciMod, _fibonacci.fibonacciShiftRight, maxLen);
         }
+      }
+    }, {
+      key: 'fromDigitsWithFunc',
+      value: function fromDigitsWithFunc(arr, push) {
+        var weight = 1;
+
+        var ret = arr.reduce(function (p, c, _i) {
+          var val = p + c * weight;
+          weight = push(weight);
+          return val;
+        }, 0);
+
+        return ret;
       }
     }, {
       key: 'fromDigits',
@@ -139,23 +136,20 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
         var method = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 10;
 
-        var baseMap = function baseMap() {
-          var f = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _util.pow;
-
-          return function (x, i) {
-            return x * f(i);
-          };
-        };
-
         if (method == null) {
           return function (m) {
             return _this2.fromDigits(arr, m);
           };
         } else if (typeof method === 'number') {
-          var n = method;
-          return this.fromDigits(arr, (0, _util.pow)(n));
+          var base = method;
+          return this.fromDigits(arr, (0, _positional.positionalShiftLeft)(base));
+        } else if (method === 'fibonacci') {
+          return this.fromDigitsWithFunc(arr, _fibonacci.fibonacciShiftLeft);
         } else if (typeof method === 'function') {
-          return arr.map(baseMap(method)).reduce(_util.sum);
+          var push = method;
+
+          return this.fromDigitsWithFunc(arr, push);
+          // return arr.map(baseMap(method)).reduce(sum);
         }
       }
     }, {
